@@ -1,3 +1,7 @@
+using API.Extensions;
+using Application.Activities;
+using Application.Core;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -19,23 +23,9 @@ namespace API
         
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
-            
-            services.AddDbContext<DataContext>(cfg=>{
-                cfg.UseSqlite(config.GetConnectionString("DefaultConnection"));
-            });
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "API", Version = "v1" });
-            });
-
-            services.AddCors(cfg=>{
-                cfg.AddPolicy("CorsPolicy",policy=>{
-                    policy.AllowAnyMethod().AllowAnyHeader().WithOrigins("http://localhost:3000");
-                });
-            });
+            services.AddApplicationServices(config);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
