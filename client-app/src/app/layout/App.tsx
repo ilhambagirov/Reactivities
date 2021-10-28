@@ -6,26 +6,23 @@ import ActivityDashboard from '../../features/activities/dashboard/ActivitiesDas
 import { v4 as uuid } from 'uuid';
 import agent from '../api/agent';
 import Loading from './LoadingComponents';
+import { useStore } from '../stores/store';
+import { toJS } from 'mobx';
+import { observer } from 'mobx-react-lite';
 
 function App() {
+
+  const {activitystore }=useStore()
+
 
   const [activities, setActivities] = useState<IActivity[]>([])
   const [selectedActivity, setSelectedActivity] = useState<IActivity | undefined>(undefined)
   const [editMode, setEditMode] = useState(false)
-  const [LoadingMode, setLoadingMode] = useState(true)
   const [Submitting, setSubmitting] = useState(false)
 
   useEffect(() => {
-    agent.Activities.list().then(response => {
-      let activities: IActivity[] = []
-      response.forEach(a => {
-        a.date = a.date.split('T')[0]
-        activities.push(a)
-      })
-      setActivities(activities)
-      setLoadingMode(false)
-    })
-  }, [])
+    activitystore.loadActivities()
+  }, [activitystore])
 
   function handleSelectActivity(id: string) {
     setSelectedActivity(activities.find(x => x.id === id))
@@ -65,9 +62,6 @@ function App() {
 
     }
 
-
-
-
   }
 
   function handleDelete(id: string) {
@@ -80,13 +74,13 @@ function App() {
    
   }
 
-  if (LoadingMode) return <Loading content='Loading...' />
+  if (activitystore.loadingInitial) return <Loading content='Loading...' />
   return (
     <Fragment>
       <NavBar
         openForm={handleFormOpen} />
       <Container style={{ marginTop: '7em' }}>
-        <ActivityDashboard activities={activities}
+        <ActivityDashboard activities={toJS(activitystore.activities)}
           selectedActivity={selectedActivity}
           selectActivity={handleSelectActivity}
           cancelSelectActivity={handleCancelSelectActivity}
@@ -101,4 +95,4 @@ function App() {
     </Fragment>
   );
 }
-export default App;
+export default observer(App);
