@@ -11,7 +11,7 @@ axios.defaults.baseURL = 'https://localhost:44364/api'
 
 axios.interceptors.response.use(async response => {
     try {
-        await sleep(1000);
+        await sleep(200);
         return response;
     } catch (error) {
         console.log(error);
@@ -30,7 +30,7 @@ const request = {
 
 const Activities = {
     list: () => request.get<IActivity[]>('/activities'),
-    details: (id: string) => request.get<IActivity[]>(`/activities/${id}`),
+    details: (id: string) => request.get<IActivity>(`/activities/${id}`),
     create: (activity: IActivity) => axios.post<void>('/activities', activity),
     edit: (activity: IActivity) => axios.put<void>(`/activities/${activity.id}`, activity),
     delete: (id: string) => axios.delete<void>(`/activities/${id}`),
