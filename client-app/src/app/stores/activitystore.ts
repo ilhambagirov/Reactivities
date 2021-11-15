@@ -1,7 +1,6 @@
 import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { IActivity } from "../models/activity";
-import { v4 as uuid } from 'uuid';
 
 export default class Activitystore {
 
@@ -16,6 +15,16 @@ export default class Activitystore {
 
     get activitesByDate() {
         return Array.from(this.activityRegistry.values()).sort((a, b) => Date.parse(a.date) - Date.parse(b.date))
+    }
+
+    get groupedActivities() {
+        return Object.entries(
+            this.activitesByDate.reduce((activities, activity) => {
+                const date = activity.date
+                activities[date] = activities[date] ? [...activities[date], activity] : [activity]
+                return activities;
+            }, {} as { [key: string]: IActivity[] })
+        )
     }
 
     loadActivities = async () => {
@@ -92,7 +101,7 @@ export default class Activitystore {
         let activity = this.getActivity(id)
 
         if (activity) {
-            runInAction(()=>{
+            runInAction(() => {
                 this.SelectedActivity = activity;
             })
             return activity;
@@ -101,7 +110,7 @@ export default class Activitystore {
 
             try {
                 activity = await agent.Activities.details(id);
-                runInAction(()=>{
+                runInAction(() => {
                     this.SelectedActivity = activity;
                 })
                 this.setActivity(activity)
