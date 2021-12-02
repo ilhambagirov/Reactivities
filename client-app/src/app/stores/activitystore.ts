@@ -2,6 +2,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import agent from "../api/agent";
 import { IActivity } from "../models/activity";
 
+
 export default class Activitystore {
 
     activityRegistry = new Map<string, IActivity>();
@@ -130,4 +131,6 @@ export default class Activitystore {
         a.date = a.date.split('T')[0]
         this.activityRegistry.set(a.id, a);
     }
+
+
 }

@@ -1,4 +1,6 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosError, AxiosResponse } from "axios";
+import { toast } from "react-toastify";
+import { history } from "../..";
 import { IActivity } from "../models/activity";
 
 const sleep = (delay: number) => {
@@ -10,13 +12,17 @@ const sleep = (delay: number) => {
 axios.defaults.baseURL = 'https://localhost:44364/api'
 
 axios.interceptors.response.use(async response => {
-    try {
-        await sleep(200);
-        return response;
-    } catch (error) {
-        console.log(error);
-        Promise.reject(error);
+    await sleep(200);
+    return response;
+}, (error: AxiosError) => {
+    const { data, status } = error.response!;
+    switch (status) {
+        case 400: toast.error('Bad Request'); break;
+        case 401: toast.error('Unauthorized'); break
+        case 404: history.push('/not-found'); break;
+        case 500: toast.error('Server Error'); break;
     }
+    return Promise.reject(error)
 })
 
 const responseBody = <T>(response: AxiosResponse<T>) => response.data
@@ -34,7 +40,6 @@ const Activities = {
     create: (activity: IActivity) => axios.post<void>('/activities', activity),
     edit: (activity: IActivity) => axios.put<void>(`/activities/${activity.id}`, activity),
     delete: (id: string) => axios.delete<void>(`/activities/${id}`),
-
 }
 
 const agent = {
