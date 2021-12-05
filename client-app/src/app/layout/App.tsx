@@ -27,7 +27,7 @@ function App() {
 
             <Switch>
               <Route exact path='/activities' component={ActivityDashboard} />
-              <Route key={location.key} path={['/createActivity', '/editActivity:id']} component={ActivityForm} />
+              <Route key={location.key} path={['/createActivity', '/manage/:id']} component={ActivityForm} />
               <Route exact path='/activities/:id' component={ACtivityDeatils} />
               <Route exact path='/errors' component={TestErrors} />
               <Route exact path='/servererror' component={ServerError} />
