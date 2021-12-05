@@ -11,6 +11,7 @@ import TestErrors from '../../features/errors/TestError';
 import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/errors/NotFound';
 import { Switch } from 'react-router-dom';
+import ServerError from '../../features/errors/ServerError';
 
 function App() {
 
@@ -29,6 +30,7 @@ function App() {
               <Route key={location.key} path={['/createActivity', '/editActivity:id']} component={ActivityForm} />
               <Route exact path='/activities/:id' component={ACtivityDeatils} />
               <Route exact path='/errors' component={TestErrors} />
+              <Route exact path='/servererror' component={ServerError} />
               <Route component={NotFound} />
             </Switch>
 
