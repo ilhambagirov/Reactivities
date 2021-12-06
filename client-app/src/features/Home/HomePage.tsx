@@ -11,7 +11,7 @@ export default function homePage() {
                     <Image size='massive' src='/assets/logo.png' alt='logo' style={{ marginBottom: 12 }} />
                 </Header>
                 <Header as='h2' content='Welcome to MeetUp'/>
-                <Button as={Link} to='/activities' size='huge' inverted>Activities</Button>
+                <Button as={Link} to='/login' size='huge' inverted>Login</Button>
             </Container>
         </Segment>
 

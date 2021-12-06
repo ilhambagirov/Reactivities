@@ -12,6 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import NotFound from '../../features/errors/NotFound';
 import { Switch } from 'react-router-dom';
 import ServerError from '../../features/errors/ServerError';
+import LoginForm from '../../features/Users/LoginForm';
 
 function App() {
 
@@ -31,6 +32,7 @@ function App() {
               <Route exact path='/activities/:id' component={ACtivityDeatils} />
               <Route exact path='/errors' component={TestErrors} />
               <Route exact path='/servererror' component={ServerError} />
+              <Route exact path='/login' component={LoginForm} />
               <Route component={NotFound} />
             </Switch>
 
