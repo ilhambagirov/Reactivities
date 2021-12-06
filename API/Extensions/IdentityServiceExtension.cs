@@ -12,27 +12,28 @@ namespace API.Extensions
 {
     public static class IdentityServiceExtension
     {
-      
-        public static IServiceCollection AddIdentityServices(this IServiceCollection services , IConfiguration cfg)
+
+        public static IServiceCollection AddIdentityServices(this IServiceCollection services, IConfiguration cfg)
         {
             services.AddIdentityCore<AppUser>(opt =>
             {
                 opt.Password.RequireNonAlphanumeric = false;
             })
                 .AddEntityFrameworkStores<DataContext>()
-                .AddSignInManager<SignInManager<AppUser>>();
+                .AddSignInManager<SignInManager<AppUser>>()
+                .AddUserManager<UserManager<AppUser>>();
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(cfg["TokenKey"]));
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(opt=>
+                .AddJwtBearer(opt =>
                 {
                     opt.TokenValidationParameters = new TokenValidationParameters
                     {
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey= key,
-                        ValidateIssuer=false,
-                        ValidateAudience=false
+                        IssuerSigningKey = key,
+                        ValidateIssuer = false,
+                        ValidateAudience = false
                     };
                 }
                 );

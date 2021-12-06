@@ -12,7 +12,11 @@ const sleep = (delay: number) => {
 }
 
 axios.defaults.baseURL = 'https://localhost:44364/api'
-
+axios.interceptors.request.use(config => {
+    const token = store.serverStore.token
+    if (token) config.headers.Authorization = `Bearer ${token}`
+    return config
+})
 axios.interceptors.response.use(async response => {
     await sleep(200);
     return response;
@@ -37,7 +41,6 @@ axios.interceptors.response.use(async response => {
                 throw modelStateErrors.flat()
             } 
             break;
-        case 401: toast.error('Unauthorized'); break
         case 404: history.push('/not-found'); break;
         case 500:
             store.serverStore.setServerError(data)
@@ -67,7 +70,7 @@ const Activities = {
 const Account = {
     Current: () => request.get<User>('/account'),
     login: (user: UserFormValues) => request.post<User>(`/account`,user),
-    register: (user: UserFormValues) => axios.post<void>('/account/register', user),
+    register: (user: UserFormValues) => axios.post<User>('/account/register', user),
 }
 
 const agent = {

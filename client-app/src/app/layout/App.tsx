@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import { Container } from 'semantic-ui-react';
 import NavBar from './NavBar';
 import ActivityDashboard from '../../features/activities/dashboard/ActivitiesDashboard';
@@ -13,13 +13,29 @@ import NotFound from '../../features/errors/NotFound';
 import { Switch } from 'react-router-dom';
 import ServerError from '../../features/errors/ServerError';
 import LoginForm from '../../features/Users/LoginForm';
+import { useStore } from '../stores/store';
+import Loading from './LoadingComponents';
+import ModalContainer from '../common/modals/ModalContainer';
 
 function App() {
 
   const location = useLocation()
+  const { serverStore, userStore } = useStore();
+
+  useEffect(() => {
+    if (serverStore.token) {
+      userStore.getUser().finally(() => serverStore.setAppLoaded())
+    } else {
+      serverStore.setAppLoaded()
+    }
+  }, [serverStore, userStore])
+
+  if (!serverStore.appLoaded) return <Loading content='Loading...' />
+  
   return (
     <Fragment>
       <ToastContainer position='bottom-right' hideProgressBar />
+      <ModalContainer/>
       <Route exact path='/' component={homePage} />
       <Route path='/(.+)' render={() => (
         <>
