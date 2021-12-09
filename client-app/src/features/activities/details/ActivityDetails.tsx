@@ -13,7 +13,7 @@ export default observer(function ACtivityDeatils() {
 
     const { activitystore } = useStore();
 
-    const {SelectedActivity,loadActivities} = activitystore
+    const {SelectedActivity:activity,loadActivities} = activitystore
 
     const { id } = useParams<{ id: string }>()
 
@@ -21,16 +21,16 @@ export default observer(function ACtivityDeatils() {
         if (id) activitystore.loadActivity(id)
     }, [id, loadActivities])
 
-    if (activitystore.loadingInitial || !SelectedActivity) return <LoadingComponents content={""} />;
+    if (activitystore.loadingInitial || !activity) return <LoadingComponents content={""} />;
     return (
         <Grid>
             <Grid.Column width={10}>
-                <ActivityDetailedHeader activity={SelectedActivity}/>
-                <ActivityDetailedInfo activity={SelectedActivity}/>
+                <ActivityDetailedHeader activity={activity}/>
+                <ActivityDetailedInfo activity={activity}/>
                 <ActivityDetailedChat/>
             </Grid.Column>
             <Grid.Column width={6}>
-                <ActivityDetailedSidebar/>
+                <ActivityDetailedSidebar activity={activity}/>
             </Grid.Column>
         </Grid>
     )

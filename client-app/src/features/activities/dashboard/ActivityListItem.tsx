@@ -1,14 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button, Icon, Item, Segment } from "semantic-ui-react";
+import { Button, Icon, Item, Label, Segment } from "semantic-ui-react";
 import { IActivity } from "../../../app/models/activity";
-import {format} from 'date-fns'
+import { format } from 'date-fns'
+import ActivityListItemAttendee from "./ActivityListItemAttendee";
+import { observer } from "mobx-react-lite";
 
 interface Props {
     activity: IActivity
 }
 
-export default function ActivityListItem({ activity }: Props) {
+export default observer(function ActivityListItem({ activity }: Props) {
 
     return (
         <Segment.Group>
@@ -21,7 +23,21 @@ export default function ActivityListItem({ activity }: Props) {
                                 {activity.title}
                             </Item.Header>
                             <Item.Description>
-                                Hosted by Ilham
+                                Hosted by {activity.host?.displayName}
+                                {activity.isHost &&
+                                    <Item.Description>
+                                        <Label basic color='orange'>
+                                            You are hosting this event
+                                        </Label>
+                                    </Item.Description>
+                                }
+                                 {activity.isGoing && !activity.isHost &&
+                                    <Item.Description>
+                                        <Label basic color='orange'>
+                                            You are going this event
+                                        </Label>
+                                    </Item.Description>
+                                }
                             </Item.Description>
                         </Item.Content>
                     </Item>
@@ -30,18 +46,18 @@ export default function ActivityListItem({ activity }: Props) {
 
             <Segment>
                 <span>
-                    <Icon name='clock' /> {format(activity.date!,('dd MMM yyyy h:mm aa'))}
+                    <Icon name='clock' /> {format(activity.date!, ('dd MMM yyyy h:mm aa'))}
                     <Icon name='marker' /> {activity.venue}
                 </span>
             </Segment>
 
             <Segment secondary>
-                Attendees go here
+                <ActivityListItemAttendee attendees={activity.attendees!} />
             </Segment>
             <Segment clearing>
                 {activity.description}
-                <Button as={Link} to={`/activities/${activity.id}`} color='teal' floated='right' content='View'/>
+                <Button as={Link} to={`/activities/${activity.id}`} color='teal' floated='right' content='View' />
             </Segment>
         </Segment.Group>
     )
-}
+})
