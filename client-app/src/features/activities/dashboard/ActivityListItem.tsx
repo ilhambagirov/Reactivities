@@ -15,9 +15,12 @@ export default observer(function ActivityListItem({ activity }: Props) {
     return (
         <Segment.Group>
             <Segment>
+                {activity.isCancelled &&
+                    <Label attached="top" style={{ textAlign: 'center' }} ribbon color='red' content='Cancelled' />
+                }
                 <Item.Group>
                     <Item>
-                        <Item.Image size='tiny' circular src='/assets/user.png' />
+                        <Item.Image style={{marginBottom: 3}} size='tiny' circular src='/assets/user.png' />
                         <Item.Content>
                             <Item.Header as={Link} to={`/activities/${activity.id}`}>
                                 {activity.title}
@@ -31,7 +34,7 @@ export default observer(function ActivityListItem({ activity }: Props) {
                                         </Label>
                                     </Item.Description>
                                 }
-                                 {activity.isGoing && !activity.isHost &&
+                                {activity.isGoing && !activity.isHost &&
                                     <Item.Description>
                                         <Label basic color='orange'>
                                             You are going this event

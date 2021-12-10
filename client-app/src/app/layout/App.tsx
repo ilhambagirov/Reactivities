@@ -30,7 +30,7 @@ function App() {
     }
   }, [serverStore, userStore])
 
-  if (!serverStore.appLoaded) return <Loading content='Loading...' />
+  // if (!serverStore.appLoaded) return <Loading content='Loading...' />
   
   return (
     <Fragment>

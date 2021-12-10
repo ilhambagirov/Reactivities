@@ -63,8 +63,10 @@ namespace Application.Activities
                         Activity = activity,
                         IsHost = false
                     };
+
+                    activity.Attendees.Add(attendance);
                 }
-                var result = await db.SaveChangesAsync(cancellationToken) > 0;
+                var result = await db.SaveChangesAsync() > 0;
 
                 return result ? Result<Unit>.Success(Unit.Value) : Result<Unit>.Failure("Problem while updating");
             }

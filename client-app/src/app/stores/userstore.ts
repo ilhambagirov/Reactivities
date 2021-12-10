@@ -32,6 +32,7 @@ export default class UserStore {
         store.serverStore.setToken(null)
         window.localStorage.removeItem('jwt')
         this.user = null
+        store.activitystore.activityRegistry.clear()
         history.push("/")
     }
 
